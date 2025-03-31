@@ -1,0 +1,6 @@
+applicationType: cli
+defaultPackage: cz.nekola.micronaut.mcp.demo.cli
+testFramework: kotest
+sourceLanguage: kotlin
+buildTool: gradle_kotlin
+features: [ app-name, gradle, http-client-test, kapt, kotest, kotlin, logback, micronaut-build, picocli, picocli-kotest, picocli-kotlin-application, properties, readme, serialization-jackson, shade ]
