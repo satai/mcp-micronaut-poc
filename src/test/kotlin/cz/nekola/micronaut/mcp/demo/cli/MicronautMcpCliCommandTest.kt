@@ -1,4 +1,4 @@
-package cz.nekola.micronaut.mcp.demo.cli;
+package cz.nekola.micronaut.mcp.demo.cli
 
 import io.kotest.matchers.string.shouldContain
 import io.kotest.core.spec.style.BehaviorSpec

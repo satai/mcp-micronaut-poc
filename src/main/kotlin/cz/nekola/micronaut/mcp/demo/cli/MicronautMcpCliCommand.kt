@@ -1,10 +1,14 @@
 package cz.nekola.micronaut.mcp.demo.cli
 
 import io.micronaut.configuration.picocli.PicocliRunner
+import io.micronaut.context.ApplicationContext
+import io.micronaut.context.annotation.Requires
 import io.modelcontextprotocol.kotlin.sdk.*
+import io.modelcontextprotocol.kotlin.sdk.Tool as SdkTool
 import io.modelcontextprotocol.kotlin.sdk.server.Server
 import io.modelcontextprotocol.kotlin.sdk.server.ServerOptions
 import io.modelcontextprotocol.kotlin.sdk.server.StdioServerTransport
+import jakarta.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
 import kotlinx.io.asSink
@@ -20,10 +24,14 @@ import picocli.CommandLine.Option
     name = "micronaut-mcp-cli", description = ["..."],
     mixinStandardHelpOptions = true
 )
-class MicronautMcpCliCommand : Runnable {
+class MicronautMcpCliCommand(
+) : Runnable {
 
     @Option(names = ["-v", "--verbose"], description = ["..."])
     private var verbose: Boolean = false
+
+    @Inject
+    var applicationContext: ApplicationContext? =  null
 
     override fun run() {
         // business logic here
@@ -47,7 +55,7 @@ class MicronautMcpCliCommand : Runnable {
         server.addTool(
             name = "foo",
             description = "A test tool, fooing mostly",
-            inputSchema = Tool.Input(
+            inputSchema = SdkTool.Input(
                 properties = JsonObject(mapOf(
                     "par" to JsonObject(
                         mapOf("type" to JsonPrimitive("number"))
@@ -65,6 +73,8 @@ class MicronautMcpCliCommand : Runnable {
         )
 
         runBlocking {
+            println("${applicationContext!!.getBean(ToolBuilder::class.java)}")
+            println("${applicationContext!!.getBean(cz.nekola.micronaut.mcp.demo.cli.FooTool::class.java)}")
             server.connect(transport)
             val done = Job()
             server.onClose {
