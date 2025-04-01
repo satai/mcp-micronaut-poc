@@ -39,45 +39,19 @@ class MicronautMcpCliCommand(
             println("Hi!")
         }
 
-        val server = Server(
-            Implementation(
-                name = "mcp-kotlin test server",
-                version = "0.1.0"
-            ),
-            ServerOptions(
-                capabilities = ServerCapabilities(
-                    prompts = ServerCapabilities.Prompts(listChanged = true),
-                    resources = ServerCapabilities.Resources(subscribe = true, listChanged = true),
-                    tools = ServerCapabilities.Tools(listChanged = true),
-                )
-            )
-        )
-        server.addTool(
-            name = "foo",
-            description = "A test tool, fooing mostly",
-            inputSchema = SdkTool.Input(
-                properties = JsonObject(mapOf(
-                    "par" to JsonObject(
-                        mapOf("type" to JsonPrimitive("number"))
-                    ),
-                ))
-            )
-        ) { request ->
-            CallToolResult(
-                content = listOf(TextContent("Hello, ${request.arguments}!"))
-            )
-        }
         val transport = StdioServerTransport(
             inputStream = System.`in`.asSource().buffered(),
             outputStream = System.out.asSink().buffered()
         )
 
         runBlocking {
-            println("${applicationContext!!.getBean(ToolBuilder::class.java)}")
-            println("${applicationContext!!.getBean(cz.nekola.micronaut.mcp.demo.cli.FooTool::class.java)}")
-            server.connect(transport)
+//            println("${applicationContext!!.getBean(ToolBuilder::class.java)}")
+//            println("${applicationContext!!.getBean(cz.nekola.micronaut.mcp.demo.cli.FooTool::class.java)}")
+            val serverWrapper = applicationContext!!.getBean(ServerWrapper::class.java)
+//            println("$serverWrapper")
+            serverWrapper.server.connect(transport)
             val done = Job()
-            server.onClose {
+            serverWrapper.server.onClose {
                 done.complete()
             }
             done.join()
