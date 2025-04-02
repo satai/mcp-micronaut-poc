@@ -17,7 +17,7 @@ class ToolBuilder(
     override fun process(beanDefinition: BeanDefinition<*>?, method: ExecutableMethod<*, *>?) {
 
         val annotation = method!!.annotationMetadata.getAnnotation(Tool::class.java)
-        val inputSchema = io.modelcontextprotocol.kotlin.sdk.Tool.Input(
+        val inputSchema = SdkTool.Input(
             properties = JsonObject(
                 method.arguments.associate {
                     val description = it.getAnnotation(ToolArg::class.java).stringValue("description").get()
