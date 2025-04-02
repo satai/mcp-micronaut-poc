@@ -15,8 +15,8 @@ class FooTool() {
         description = "Toolik2 that Foos a lot"
     )
     fun toolika2(
-        @ToolArg(name="arg1", description="Arg 1 desc") arg11: Int,
-        @ToolArg("arg1", "Arg 2 desc") arg22: String
+        @ToolArg(description="Arg 1 desc") arg11: Int,
+        @ToolArg("Arg 2 desc") arg22: String
     ): String {
         return "toolik $arg11 $arg22"
     }
@@ -27,7 +27,7 @@ class FooTool() {
         description = "Toolik3 that Foos a lot"
     )
     fun toolika3(
-        @ToolArg(name="arg1", description="Arg 1 desc") arg1: Int,
+        @ToolArg(description="Arg 1 desc") arg1: Int,
     ): String {
         return "toolik $arg1"
     }

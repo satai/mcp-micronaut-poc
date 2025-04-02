@@ -16,6 +16,6 @@ annotation class Tool(
 @Target(AnnotationTarget.VALUE_PARAMETER)
 @Executable(processOnStartup = true)
 annotation class ToolArg(
-    val name: String, // TODO don't require, default to arg name
+    // val name: String, TODO don't require, default to arg name
     val description: String
 )
