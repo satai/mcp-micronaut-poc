@@ -38,7 +38,7 @@ class ArgumentConverter {
             Float::class.java
                     -> element.jsonPrimitive.floatOrNull
             Double::class.javaPrimitiveType,
-            Double::class.javaPrimitiveType
+            Double::class.java
                     -> element.jsonPrimitive.doubleOrNull
             String::class.java
                 -> element.jsonPrimitive.toString()
