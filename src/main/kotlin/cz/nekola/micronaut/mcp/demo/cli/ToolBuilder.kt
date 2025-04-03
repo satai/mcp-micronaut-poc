@@ -14,6 +14,7 @@ class ToolBuilder(
     private val serverWrapper: ServerWrapper,
     private val applicationContext: ApplicationContext,
     private val typeConverter: TypeConverter,
+    private val argumentConverter: ArgumentConverter,
 ): ExecutableMethodProcessor<Tool> {
     override fun process(beanDefinition: BeanDefinition<*>?, method: ExecutableMethod<*, *>?) {
 
@@ -38,18 +39,20 @@ class ToolBuilder(
                 description = annotation.stringValue("description").get(),
                 inputSchema = inputSchema
             ),
-            handler = {
-                call ->
-                    val toTypedArray: Array<Any> = method.arguments.map { arg ->
-                        val element: JsonElement = call.arguments[arg.name]!!
-                        if (arg.type == String::class.java) element.jsonPrimitive.toString() else element.jsonPrimitive.intOrNull!!
-                    }.toTypedArray()
-                val bean = applicationContext.getBean(beanDefinition)
-                val beanResult = method.targetMethod.invoke(bean, *toTypedArray)
-                CallToolResult(listOf(TextContent(beanResult.toString())))
-
-            }
+            handler = callHandler(method, beanDefinition)
         )
     }
+
+    private fun callHandler(
+        method: ExecutableMethod<*, *>,
+        beanDefinition: BeanDefinition<*>?,
+    ): suspend (CallToolRequest) -> CallToolResult =
+        { call ->
+            val args: Array<Any?> = method.arguments.map { parameter -> argumentConverter.convert(call, parameter) }.toTypedArray()
+            val bean = applicationContext.getBean(beanDefinition)
+            val beanResult = method.targetMethod.invoke(bean, *args)
+            CallToolResult(listOf(TextContent(beanResult.toString())))
+        }
+
 
 }
