@@ -2,6 +2,8 @@ package cz.nekola.micronaut.mcp.demo.cli
 
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.processor.ExecutableMethodProcessor
+import io.micronaut.core.annotation.NonNull
+import io.micronaut.core.type.Argument
 import io.micronaut.inject.BeanDefinition
 import io.micronaut.inject.ExecutableMethod
 import io.modelcontextprotocol.kotlin.sdk.*
@@ -23,7 +25,7 @@ class ToolBuilder(
                     val description = it.getAnnotation(ToolArg::class.java).stringValue("description").get()
                     it.name to JsonObject(
                         mapOf(
-                            "type" to JsonPrimitive(if (it.type == String::class.java) "string" else "number"), //TODO
+                            "type" to jdkType2McpType(it),
                             "description" to JsonPrimitive(description)
                         )
                     )
@@ -50,4 +52,21 @@ class ToolBuilder(
             }
         )
     }
+
+    private fun jdkType2McpType(it: @NonNull Argument<*>) =
+        when (it.type) {
+            String::class.java
+                -> JsonPrimitive("String")
+            Int::class.javaPrimitiveType,
+            Integer::class.java,
+            Long::class.java,
+            Long::class.javaPrimitiveType
+                -> JsonPrimitive("integer")
+            Double::class.javaPrimitiveType,
+            Double::class.java,
+            Float::class.javaPrimitiveType,
+            Float::class.javaPrimitiveType
+                -> JsonPrimitive("number")
+            else -> throw IllegalArgumentException("${it.type} is not supported")
+        }
 }
