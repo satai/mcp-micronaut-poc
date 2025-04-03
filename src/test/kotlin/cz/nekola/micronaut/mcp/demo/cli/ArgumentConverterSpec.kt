@@ -2,19 +2,15 @@ package cz.nekola.micronaut.mcp.demo.cli
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.data.forAll
-import io.kotest.data.headers
-import io.kotest.data.row
-import io.kotest.data.table
 import io.kotest.matchers.shouldBe
 import io.micronaut.core.type.Argument
 import io.micronaut.test.extensions.kotest5.annotation.MicronautTest
 import io.modelcontextprotocol.kotlin.sdk.CallToolRequest
 import kotlinx.serialization.json.*
+import kotlin.random.Random
 
 @MicronautTest
 class ArgumentConverterSpec : BehaviorSpec({
-
     given("ArgumentConverter") {
         val argumentConverter = ArgumentConverter()
 
@@ -28,114 +24,130 @@ class ArgumentConverterSpec : BehaviorSpec({
                 return Argument.of(type, name)
             }
 
-            then("should correctly convert integer types") {
+            // Helper function to create a CallToolRequest with a parameter
+            fun <T> createCallToolRequest(paramName: String, value: T): CallToolRequest {
+                val jsonElement = when (value) {
+                    is Int -> JsonPrimitive(value)
+                    is Long -> JsonPrimitive(value)
+                    is Boolean -> JsonPrimitive(value)
+                    is Float -> JsonPrimitive(value)
+                    is Double -> JsonPrimitive(value)
+                    is String -> JsonPrimitive(value)
+                    else -> throw IllegalArgumentException("Unsupported type")
+                }
+                return callToolRequestPrototype.copy(
+                    arguments = JsonObject(
+                        mapOf(paramName to jsonElement)
+                    )
+                )
+            }
+
+            then("should correctly convert integer types with random values") {
                 val paramName = "intParam"
-                val intValue = 42
-                val jsonElement = JsonPrimitive(intValue)
-                val callToolRequest = callToolRequestPrototype.copy(
-                    arguments = JsonObject(
-                        mapOf(paramName to jsonElement)
-                    )
-                )
+                val intValues = List(10) { Random.nextInt(-1000, 1000) }
 
-                table(
-                    headers("Type", "Expected Value"),
-                    row(Int::class.java, intValue),
-                    row(Int::class.javaPrimitiveType!!, intValue),
-                ).forAll { type, expectedValue ->
-                    val argument = createArgument(paramName, type)
-                    argumentConverter.convert(callToolRequest, argument) shouldBe expectedValue
+                intValues.forEach { intValue ->
+                    val callToolRequest = createCallToolRequest(paramName, intValue)
+
+                    // Test both boxed and primitive types
+                    val boxedType = Int::class.java
+                    val primitiveType = Int::class.javaPrimitiveType!!
+
+                    val boxedArgument = createArgument(paramName, boxedType)
+                    val primitiveArgument = createArgument(paramName, primitiveType)
+
+                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe intValue
+                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe intValue
                 }
             }
 
-            then("should correctly convert long types") {
+            then("should correctly convert long types with random values") {
                 val paramName = "longParam"
-                val longValue = 42L
-                val jsonElement = JsonPrimitive(longValue)
-                val callToolRequest = callToolRequestPrototype.copy(
-                    arguments = JsonObject(
-                        mapOf(paramName to jsonElement)
-                    )
-                )
-                table(
-                    headers("Type", "Expected Value"),
-                    row(Long::class.java, longValue),
-                    row(Long::class.javaPrimitiveType!!, longValue),
-                ).forAll { type, expectedValue ->
-                    val argument = createArgument(paramName, type)
-                    argumentConverter.convert(callToolRequest, argument) shouldBe expectedValue
+                val longValues = List(10) { Random.nextLong(-1000, 1000) }
+
+                longValues.forEach { longValue ->
+                    val callToolRequest = createCallToolRequest(paramName, longValue)
+
+                    // Test both boxed and primitive types
+                    val boxedType = Long::class.java
+                    val primitiveType = Long::class.javaPrimitiveType!!
+
+                    val boxedArgument = createArgument(paramName, boxedType)
+                    val primitiveArgument = createArgument(paramName, primitiveType)
+
+                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe longValue
+                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe longValue
                 }
             }
 
-            then("should correctly convert boolean types") {
+            then("should correctly convert boolean types with all possible values") {
                 val paramName = "booleanParam"
-                val booleanValue = true
-                val jsonElement = JsonPrimitive(booleanValue)
-                val callToolRequest = callToolRequestPrototype.copy(
-                    arguments = JsonObject(
-                        mapOf(paramName to jsonElement)
-                    )
-                )
-                table(
-                    headers("Type", "Expected Value"),
-                    row(Boolean::class.java, booleanValue),
-                    row(Boolean::class.javaPrimitiveType!!, booleanValue),
-                ).forAll { type, expectedValue ->
-                    val argument = createArgument(paramName, type)
-                    argumentConverter.convert(callToolRequest, argument) shouldBe expectedValue
+                val booleanValues = listOf(true, false)
+
+                booleanValues.forEach { booleanValue ->
+                    val callToolRequest = createCallToolRequest(paramName, booleanValue)
+
+                    // Test both boxed and primitive types
+                    val boxedType = Boolean::class.java
+                    val primitiveType = Boolean::class.javaPrimitiveType!!
+
+                    val boxedArgument = createArgument(paramName, boxedType)
+                    val primitiveArgument = createArgument(paramName, primitiveType)
+
+                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe booleanValue
+                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe booleanValue
                 }
             }
 
-            then("should correctly convert float types") {
+            then("should correctly convert float types with random values") {
                 val paramName = "floatParam"
-                val floatValue = 42.0f
-                val jsonElement = JsonPrimitive(floatValue)
-                val callToolRequest = callToolRequestPrototype.copy(
-                    arguments = JsonObject(
-                        mapOf(paramName to jsonElement)
-                    )
-                )
-                table(
-                    headers("Type", "Expected Value"),
-                    row(Float::class.java, floatValue),
-                    row(Float::class.javaPrimitiveType!!, floatValue),
-                ).forAll { type, expectedValue ->
-                    val argument = createArgument(paramName, type)
-                    argumentConverter.convert(callToolRequest, argument) shouldBe expectedValue
+                val floatValues = List(10) { Random.nextFloat() * 2000 - 1000 }
+
+                floatValues.forEach { floatValue ->
+                    val callToolRequest = createCallToolRequest(paramName, floatValue)
+
+                    // Test both boxed and primitive types
+                    val boxedType = Float::class.java
+                    val primitiveType = Float::class.javaPrimitiveType!!
+
+                    val boxedArgument = createArgument(paramName, boxedType)
+                    val primitiveArgument = createArgument(paramName, primitiveType)
+
+                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe floatValue
+                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe floatValue
                 }
             }
 
-            then("should correctly convert double types") {
+            then("should correctly convert double types with random values") {
                 val paramName = "doubleParam"
-                val doubleValue = 42.0
-                val jsonElement = JsonPrimitive(doubleValue)
-                val callToolRequest = callToolRequestPrototype.copy(
-                    arguments = JsonObject(
-                        mapOf(paramName to jsonElement)
-                    )
-                )
-                table(
-                    headers("Type", "Expected Value"),
-                    row(Double::class.java, doubleValue),
-                    row(Double::class.javaPrimitiveType!!, doubleValue),
-                ).forAll { type, expectedValue ->
-                    val argument = createArgument(paramName, type)
-                    argumentConverter.convert(callToolRequest, argument) shouldBe expectedValue
+                val doubleValues = List(10) { Random.nextDouble(-1000.0, 1000.0) }
+
+                doubleValues.forEach { doubleValue ->
+                    val callToolRequest = createCallToolRequest(paramName, doubleValue)
+
+                    // Test both boxed and primitive types
+                    val boxedType = Double::class.java
+                    val primitiveType = Double::class.javaPrimitiveType!!
+
+                    val boxedArgument = createArgument(paramName, boxedType)
+                    val primitiveArgument = createArgument(paramName, primitiveType)
+
+                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe doubleValue
+                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe doubleValue
                 }
             }
 
-            then("should correctly convert string types") {
+            then("should correctly convert string types with random values") {
                 val paramName = "stringParam"
-                val stringValue = "test"
-                val jsonElement = JsonPrimitive(stringValue)
-                val callToolRequest = callToolRequestPrototype.copy(
-                    arguments = JsonObject(
-                        mapOf(paramName to jsonElement)
-                    )
-                )
-                val stringArgument = createArgument(paramName, String::class.java)
-                // Note: JsonPrimitive.toString() includes quotes, so we need to check differently
-                argumentConverter.convert(callToolRequest, stringArgument) shouldBe jsonElement.toString()
+                val stringValues = List(10) { "test-${Random.nextInt(1000)}" }
+
+                stringValues.forEach { stringValue ->
+                    val callToolRequest = createCallToolRequest(paramName, stringValue)
+                    val stringArgument = createArgument(paramName, String::class.java)
+
+                    // Note: JsonPrimitive.toString() includes quotes, so we need to check differently
+                    argumentConverter.convert(callToolRequest, stringArgument) shouldBe JsonPrimitive(stringValue).toString()
+                }
             }
 
             then("should throw IllegalArgumentException for unsupported types") {
