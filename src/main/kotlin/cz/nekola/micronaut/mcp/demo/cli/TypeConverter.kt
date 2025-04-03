@@ -18,7 +18,7 @@ class TypeConverter {
             Double::class.javaPrimitiveType,
             Double::class.java,
             Float::class.javaPrimitiveType,
-            Float::class.javaPrimitiveType
+            Float::class.java
                 -> JsonPrimitive("number")
             Boolean::class.javaPrimitiveType,
             Boolean::class.java
