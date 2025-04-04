@@ -3,19 +3,13 @@ package cz.nekola.micronaut.mcp.demo.cli
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.micronaut.context.ApplicationContext
-import io.micronaut.context.annotation.Value
-import io.micronaut.core.type.Argument
 import io.micronaut.inject.BeanDefinition
 import io.micronaut.inject.ExecutableMethod
-import io.micronaut.inject.beans.AbstractInitializableBeanIntrospection.BeanMethodRef
 import io.micronaut.test.extensions.kotest5.annotation.MicronautTest
 import io.mockk.*
 import io.modelcontextprotocol.kotlin.sdk.*
 import io.modelcontextprotocol.kotlin.sdk.Tool as SdkTool
-import jakarta.inject.Inject
 import kotlinx.serialization.json.*
-import java.lang.reflect.Method
-import java.util.*
 
 @MicronautTest
 class ToolBuilderSpec : BehaviorSpec({

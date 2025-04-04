@@ -1,22 +1,23 @@
 package cz.nekola.micronaut.mcp.demo.cli
 
-import io.kotest.matchers.string.shouldContain
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
 import io.micronaut.configuration.picocli.PicocliRunner
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.env.Environment
+import io.modelcontextprotocol.kotlin.sdk.CallToolRequest
 import io.modelcontextprotocol.kotlin.sdk.Implementation
+import io.modelcontextprotocol.kotlin.sdk.TextContent
 import io.modelcontextprotocol.kotlin.sdk.client.Client
 import io.modelcontextprotocol.kotlin.sdk.client.ClientOptions
 import io.modelcontextprotocol.kotlin.sdk.client.StdioClientTransport
 import kotlinx.coroutines.runBlocking
-import kotlinx.io.Source
 import kotlinx.io.asSink
 import kotlinx.io.asSource
 import kotlinx.io.buffered
-import java.io.ByteArrayOutputStream
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
 import java.io.PrintStream
@@ -57,19 +58,38 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
             PicocliRunner.run(MicronautMcpCliCommand::class.java, ctx, *args)
         }
 
-        val transport = StdioClientTransport(
-            input   = clientIn.asSource().buffered(),
-            output = clientToServer.asSink().buffered(),
-        )
-
         `when`("using Client with Std in out communication to list tools") {
+
+            val transport = StdioClientTransport(
+                input   = clientIn.asSource().buffered(),
+                output = clientToServer.asSink().buffered(),
+            )
+
+            client.connect(transport = transport)
 
             then("should be able to list tools") {
                 runBlocking {
                     try {
-                        client.connect(transport = transport)
                         val tools = client.listTools()
                         tools!!.tools.map{it.name}.shouldContain("footoolik")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        throw e
+                    }
+                }
+            }
+
+            then("should be able to use tools") {
+                runBlocking {
+                    try {
+                        client.callTool(
+                            CallToolRequest(
+                                name = "footoolai3",
+                                arguments = JsonObject(mapOf(
+                                    "arg1" to JsonPrimitive(1234)
+                                ))
+                            )
+                        )!!.content shouldBe listOf(TextContent("toolik 1234"))
                         client.close()
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -77,6 +97,8 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                     }
                 }
             }
+
+            client.close()
 
             // Restore original System.in and System.out
             System.setIn(originalIn)
