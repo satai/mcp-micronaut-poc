@@ -70,9 +70,7 @@ class MyTool {
 - Only int, boolean, number and strings as parameters
 - Only one String on output, no pictures, music
 - no configuration of the server
-- No end to end integration test
 - Temporary (?) package
-- Tested with Kotlin only, no Java, no Groovy
 - Private repo
 
 ## Contributing
