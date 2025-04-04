@@ -55,6 +55,68 @@ class TypeConverterSpec : BehaviorSpec({
                 }
             }
 
+            then("should correctly convert one-dimensional array types") {
+                table(
+                    headers("JDK Array Type", "Expected MCP Type"),
+                    row(Array<Int>::class.java, mapOf(
+                        "type" to JsonPrimitive("array"),
+                        "items" to JsonPrimitive("integer")
+                    )),
+                    row(Array<String>::class.java, mapOf(
+                        "type" to JsonPrimitive("array"),
+                        "items" to JsonPrimitive("String")
+                    )),
+                    row(Array<Boolean>::class.java, mapOf(
+                        "type" to JsonPrimitive("array"),
+                        "items" to JsonPrimitive("boolean")
+                    )),
+                    row(Array<Double>::class.java, mapOf(
+                        "type" to JsonPrimitive("array"),
+                        "items" to JsonPrimitive("number")
+                    )),
+                ).forAll { jdkType, expectedMcpType ->
+                    typeConverter.jdkType2McpType(jdkType) shouldBe expectedMcpType
+                }
+            }
+
+            then("should correctly convert multi-dimensional array types") {
+                // Test 2D array of integers
+                val intMatrix2DType = Array<Array<Int>>::class.java
+                val expectedIntMatrix2DType = mapOf(
+                    "type" to JsonPrimitive("array"),
+                    "items" to mapOf(
+                        "type" to JsonPrimitive("array"),
+                        "items" to JsonPrimitive("integer")
+                    )
+                )
+                typeConverter.jdkType2McpType(intMatrix2DType) shouldBe expectedIntMatrix2DType
+
+                // Test 2D array of strings
+                val stringMatrix2DType = Array<Array<String>>::class.java
+                val expectedStringMatrix2DType = mapOf(
+                    "type" to JsonPrimitive("array"),
+                    "items" to mapOf(
+                        "type" to JsonPrimitive("array"),
+                        "items" to JsonPrimitive("String")
+                    )
+                )
+                typeConverter.jdkType2McpType(stringMatrix2DType) shouldBe expectedStringMatrix2DType
+
+                // Test 3D array of integers
+                val intMatrix3DType = Array<Array<Array<Int>>>::class.java
+                val expectedIntMatrix3DType = mapOf(
+                    "type" to JsonPrimitive("array"),
+                    "items" to mapOf(
+                        "type" to JsonPrimitive("array"),
+                        "items" to mapOf(
+                            "type" to JsonPrimitive("array"),
+                            "items" to JsonPrimitive("integer")
+                        )
+                    )
+                )
+                typeConverter.jdkType2McpType(intMatrix3DType) shouldBe expectedIntMatrix3DType
+            }
+
             then("should throw IllegalArgumentException for unsupported types") {
                 val unsupportedTypes = listOf(
                     Char::class.java,
