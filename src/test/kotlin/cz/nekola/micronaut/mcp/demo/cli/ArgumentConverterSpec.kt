@@ -145,7 +145,6 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val callToolRequest = createCallToolRequest(paramName, stringValue)
                     val stringArgument = createArgument(paramName, String::class.java)
 
-                    // Note: JsonPrimitive.toString() includes quotes, so we need to check differently
                     argumentConverter.convert(callToolRequest, stringArgument) shouldBe stringValue
                 }
             }
