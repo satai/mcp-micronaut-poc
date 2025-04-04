@@ -71,7 +71,6 @@ class MyTool {
 - Only one String on output, no pictures, music
 - no configuration of the server
 - Temporary (?) package
-- Private repo
 
 ## Contributing
 
