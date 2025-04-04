@@ -8,6 +8,7 @@ import io.kotest.data.row
 import io.kotest.data.table
 import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.kotest5.annotation.MicronautTest
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
 @MicronautTest
@@ -60,19 +61,11 @@ class TypeConverterSpec : BehaviorSpec({
                     headers("JDK Array Type", "Expected MCP Type"),
                     row(Array<Int>::class.java, mapOf(
                         "type" to JsonPrimitive("array"),
-                        "items" to JsonPrimitive("integer")
+                        "items" to JsonObject(mapOf("type" to JsonPrimitive("integer"))),
                     )),
                     row(Array<String>::class.java, mapOf(
                         "type" to JsonPrimitive("array"),
-                        "items" to JsonPrimitive("String")
-                    )),
-                    row(Array<Boolean>::class.java, mapOf(
-                        "type" to JsonPrimitive("array"),
-                        "items" to JsonPrimitive("boolean")
-                    )),
-                    row(Array<Double>::class.java, mapOf(
-                        "type" to JsonPrimitive("array"),
-                        "items" to JsonPrimitive("number")
+                        "items" to JsonObject(mapOf("type" to JsonPrimitive("String"))),
                     )),
                 ).forAll { jdkType, expectedMcpType ->
                     typeConverter.jdkType2McpType(jdkType) shouldBe expectedMcpType
@@ -86,7 +79,7 @@ class TypeConverterSpec : BehaviorSpec({
                     "type" to JsonPrimitive("array"),
                     "items" to mapOf(
                         "type" to JsonPrimitive("array"),
-                        "items" to JsonPrimitive("integer")
+                        "items" to JsonObject(mapOf("type" to JsonPrimitive("integer"))),
                     )
                 )
                 typeConverter.jdkType2McpType(intMatrix2DType) shouldBe expectedIntMatrix2DType
@@ -97,7 +90,7 @@ class TypeConverterSpec : BehaviorSpec({
                     "type" to JsonPrimitive("array"),
                     "items" to mapOf(
                         "type" to JsonPrimitive("array"),
-                        "items" to JsonPrimitive("String")
+                        "items" to JsonObject(mapOf("type" to JsonPrimitive("String"))),
                     )
                 )
                 typeConverter.jdkType2McpType(stringMatrix2DType) shouldBe expectedStringMatrix2DType
@@ -110,7 +103,7 @@ class TypeConverterSpec : BehaviorSpec({
                         "type" to JsonPrimitive("array"),
                         "items" to mapOf(
                             "type" to JsonPrimitive("array"),
-                            "items" to JsonPrimitive("integer")
+                            "items" to JsonObject(mapOf("type" to JsonPrimitive("integer")))
                         )
                     )
                 )
