@@ -27,28 +27,17 @@ import picocli.CommandLine.Option
 class MicronautMcpCliCommand(
 ) : Runnable {
 
-    @Option(names = ["-v", "--verbose"], description = ["..."])
-    private var verbose: Boolean = false
-
     @Inject
     var applicationContext: ApplicationContext? =  null
 
     override fun run() {
-        // business logic here
-        if (verbose) {
-            println("Hi!")
-        }
-
         val transport = StdioServerTransport(
             inputStream = System.`in`.asSource().buffered(),
             outputStream = System.out.asSink().buffered()
         )
 
         runBlocking {
-//            println("${applicationContext!!.getBean(ToolBuilder::class.java)}")
-//            println("${applicationContext!!.getBean(cz.nekola.micronaut.mcp.demo.cli.FooTool::class.java)}")
             val serverWrapper = applicationContext!!.getBean(ServerWrapper::class.java)
-//            println("$serverWrapper")
             serverWrapper.server.connect(transport)
             val done = Job()
             serverWrapper.server.onClose {
