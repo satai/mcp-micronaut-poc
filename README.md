@@ -1,8 +1,8 @@
 # Micronaut MCP Cli
 
-[![Build Status](https://github.com/satai/mcp-micronaut-poc/actions/workflows/gradle.yml/badge.svg)](https://github.com/satai/mcp-micronaut-poc/actions/workflows/gradle.yml)
-
 PoC for [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) integration into [Micronaut](https://micronaut.io/) framework.
+
+[![Build Status](https://github.com/satai/mcp-micronaut-poc/actions/workflows/gradle.yml/badge.svg)](https://github.com/satai/mcp-micronaut-poc/actions/workflows/gradle.yml)
 
 ## Overview
 
