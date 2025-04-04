@@ -33,6 +33,36 @@ class ArgumentConverterSpec : BehaviorSpec({
                     is Float -> JsonPrimitive(value)
                     is Double -> JsonPrimitive(value)
                     is String -> JsonPrimitive(value)
+                    is Array<*> -> {
+                        if (value.isEmpty()) {
+                            JsonArray(emptyList())
+                        } else {
+                            JsonArray(value.map { 
+                                when (it) {
+                                    is Int -> JsonPrimitive(it)
+                                    is Long -> JsonPrimitive(it)
+                                    is Boolean -> JsonPrimitive(it)
+                                    is Float -> JsonPrimitive(it)
+                                    is Double -> JsonPrimitive(it)
+                                    is String -> JsonPrimitive(it)
+                                    is Array<*> -> {
+                                        JsonArray(it.map { innerItem ->
+                                            when (innerItem) {
+                                                is Int -> JsonPrimitive(innerItem)
+                                                is Long -> JsonPrimitive(innerItem)
+                                                is Boolean -> JsonPrimitive(innerItem)
+                                                is Float -> JsonPrimitive(innerItem)
+                                                is Double -> JsonPrimitive(innerItem)
+                                                is String -> JsonPrimitive(innerItem)
+                                                else -> throw IllegalArgumentException("Unsupported type in inner array")
+                                            }
+                                        })
+                                    }
+                                    else -> throw IllegalArgumentException("Unsupported type in array")
+                                }
+                            })
+                        }
+                    }
                     else -> throw IllegalArgumentException("Unsupported type")
                 }
                 return callToolRequestPrototype.copy(
@@ -146,6 +176,94 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val stringArgument = createArgument(paramName, String::class.java)
 
                     argumentConverter.convert(callToolRequest, stringArgument) shouldBe stringValue
+                }
+            }
+
+            then("should correctly convert one-dimensional array of integers with random values") {
+                val paramName = "intArrayParam"
+                val intArrayValues = List(5) { 
+                    Array(Random.nextInt(1, 5)) { Random.nextInt(-1000, 1000) }
+                }
+
+                intArrayValues.forEach { intArray ->
+                    val callToolRequest = createCallToolRequest(paramName, intArray)
+                    val arrayType = Array<Int>::class.java
+                    val argument = createArgument(paramName, arrayType)
+
+                    val result = argumentConverter.convert(callToolRequest, argument) as Array<*>
+
+                    // Verify the result
+                    result.size shouldBe intArray.size
+                    for (i in intArray.indices) {
+                        result[i] shouldBe intArray[i]
+                    }
+                }
+            }
+
+            then("should correctly convert one-dimensional array of strings with random values") {
+                val paramName = "stringArrayParam"
+                val stringArrayValues = List(5) { 
+                    Array(Random.nextInt(1, 5)) { "test-${Random.nextInt(1000)}" }
+                }
+
+                stringArrayValues.forEach { stringArray ->
+                    val callToolRequest = createCallToolRequest(paramName, stringArray)
+                    val arrayType = Array<String>::class.java
+                    val argument = createArgument(paramName, arrayType)
+
+                    val result = argumentConverter.convert(callToolRequest, argument) as Array<*>
+
+                    // Verify the result
+                    result.size shouldBe stringArray.size
+                    for (i in stringArray.indices) {
+                        result[i] shouldBe stringArray[i]
+                    }
+                }
+            }
+
+            then("should correctly convert empty arrays") {
+                val paramName = "emptyArrayParam"
+                val emptyIntArray = emptyArray<Int>()
+                val emptyStringArray = emptyArray<String>()
+
+                // Test empty int array
+                val intCallToolRequest = createCallToolRequest(paramName, emptyIntArray)
+                val intArrayType = Array<Int>::class.java
+                val intArgument = createArgument(paramName, intArrayType)
+                val intResult = argumentConverter.convert(intCallToolRequest, intArgument) as Array<*>
+                intResult.size shouldBe 0
+
+                // Test empty string array
+                val stringCallToolRequest = createCallToolRequest(paramName, emptyStringArray)
+                val stringArrayType = Array<String>::class.java
+                val stringArgument = createArgument(paramName, stringArrayType)
+                val stringResult = argumentConverter.convert(stringCallToolRequest, stringArgument) as Array<*>
+                stringResult.size shouldBe 0
+            }
+
+            then("should correctly convert multi-dimensional arrays") {
+                val paramName = "multiDimArrayParam"
+
+                // Create a 2D array of integers
+                val intMatrix = Array(3) { i -> 
+                    Array(2) { j -> i * 10 + j }
+                }
+
+                val callToolRequest = createCallToolRequest(paramName, intMatrix)
+                val arrayType = Array<Array<Int>>::class.java
+                val argument = createArgument(paramName, arrayType)
+
+                val result = argumentConverter.convert(callToolRequest, argument) as Array<*>
+
+                // Verify the result
+                result.size shouldBe intMatrix.size
+                for (i in intMatrix.indices) {
+                    val innerResult = result[i] as Array<*>
+                    val innerExpected = intMatrix[i]
+                    innerResult.size shouldBe innerExpected.size
+                    for (j in innerExpected.indices) {
+                        innerResult[j] shouldBe innerExpected[j]
+                    }
                 }
             }
 
