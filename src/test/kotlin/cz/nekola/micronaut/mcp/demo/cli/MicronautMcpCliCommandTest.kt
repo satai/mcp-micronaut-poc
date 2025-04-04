@@ -138,6 +138,13 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                     row("singleParamTool_float_java", "param1", JsonPrimitive(3.14f), "MultiTypeToolJava_Float answer 3.14"),
                     row("singleParamTool_double_java", "param1", JsonPrimitive(2.71828), "MultiTypeToolJava_Double answer 2.71828"),
                     row("singleParamTool_string_java", "param1", JsonPrimitive("hello"), "MultiTypeToolJava_String answer hello"),
+//                    row("singleParamTool_int_groovy", "param1", JsonPrimitive(42), "MultiTypeToolGroovy_int answer 42"),
+//                    row("singleParamTool_Integer_groovy", "param1", JsonPrimitive(123), "MultiTypeToolGroovy_Integer answer 123"),
+//                    row("singleParamTool_bool_groovy", "param1", JsonPrimitive(true), "MultiTypeToolGroovy_Bool answer true"),
+//                    row("singleParamTool_long_groovy", "param1", JsonPrimitive(9876543210L), "MultiTypeToolGroovy_Long answer 9876543210"),
+//                    row("singleParamTool_float_groovy", "param1", JsonPrimitive(3.14f), "MultiTypeToolGroovy_Float answer 3.14"),
+//                    row("singleParamTool_double_groovy", "param1", JsonPrimitive(2.71828), "MultiTypeToolGroovy_Double answer 2.71828"),
+//                    row("singleParamTool_string_groovy", "param1", JsonPrimitive("hello"), "MultiTypeToolGroovy_String answer hello"),
                 ).forAll { toolName, paramName, paramValue, expectedResponse ->
                     runBlocking {
                         try {

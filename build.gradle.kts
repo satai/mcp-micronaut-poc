@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.25"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.4.4"
+    id("groovy")
 }
 
 version = "0.1"
@@ -24,10 +25,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("io.modelcontextprotocol:kotlin-sdk:0.4.0")
+    implementation("org.apache.groovy:groovy:4.0.18")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
 }
 
 
