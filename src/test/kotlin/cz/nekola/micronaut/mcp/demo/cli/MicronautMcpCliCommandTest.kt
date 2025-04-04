@@ -90,6 +90,25 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                                 ))
                             )
                         )!!.content shouldBe listOf(TextContent("toolik 1234"))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        throw e
+                    }
+                }
+            }
+
+            then("should be able to use tools with multiple args") {
+                runBlocking {
+                    try {
+                        client.callTool(
+                            CallToolRequest(
+                                name = "footoolai2",
+                                arguments = JsonObject(mapOf(
+                                    "arg11" to JsonPrimitive(1234),
+                                    "arg22" to JsonPrimitive("arg2value")
+                                ))
+                            )
+                        )!!.content shouldBe listOf(TextContent("""toolik 1234 "arg2value""""))
                         client.close()
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -110,4 +129,6 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
 
         ctx.close()
     }
+
+    // TODO tests for error states
 })
