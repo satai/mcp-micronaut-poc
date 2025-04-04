@@ -130,7 +130,14 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                     row("singleParamTool_long", "param1", JsonPrimitive(9876543210L), "MultiTypeToolKotlin_Long answer 9876543210"),
                     row("singleParamTool_float", "param1", JsonPrimitive(3.14f), "MultiTypeToolKotlin_Float answer 3.14"),
                     row("singleParamTool_double", "param1", JsonPrimitive(2.71828), "MultiTypeToolKotlin_Double answer 2.71828"),
-                    row("singleParamTool_string", "param1", JsonPrimitive("hello"), "MultiTypeToolKotlin_String answer hello")
+                    row("singleParamTool_string", "param1", JsonPrimitive("hello"), "MultiTypeToolKotlin_String answer hello"),
+                    row("singleParamTool_int_java", "param1", JsonPrimitive(42), "MultiTypeToolJava_int answer 42"),
+                    row("singleParamTool_Integer_java", "param1", JsonPrimitive(123), "MultiTypeToolJava_Integer answer 123"),
+                    row("singleParamTool_bool_java", "param1", JsonPrimitive(true), "MultiTypeToolJava_Bool answer true"),
+                    row("singleParamTool_long_java", "param1", JsonPrimitive(9876543210L), "MultiTypeToolJava_Long answer 9876543210"),
+                    row("singleParamTool_float_java", "param1", JsonPrimitive(3.14f), "MultiTypeToolJava_Float answer 3.14"),
+                    row("singleParamTool_double_java", "param1", JsonPrimitive(2.71828), "MultiTypeToolJava_Double answer 2.71828"),
+                    row("singleParamTool_string_java", "param1", JsonPrimitive("hello"), "MultiTypeToolJava_String answer hello"),
                 ).forAll { toolName, paramName, paramValue, expectedResponse ->
                     runBlocking {
                         try {
