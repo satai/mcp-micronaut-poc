@@ -22,6 +22,10 @@ import java.io.PipedInputStream
 import java.io.PipedOutputStream
 import java.io.PrintStream
 import kotlin.concurrent.thread
+import io.kotest.data.forAll
+import io.kotest.data.headers
+import io.kotest.data.row
+import io.kotest.data.table
 
 class MicronautMcpCliCommandTest : BehaviorSpec({
 
@@ -109,10 +113,40 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                                 ))
                             )
                         )!!.content shouldBe listOf(TextContent("""toolik 1234 arg2value"""))
-                        client.close()
                     } catch (e: Exception) {
                         e.printStackTrace()
                         throw e
+                    }
+                }
+            }
+
+            then("should be able to call all variants of MultiTypeToolKotlin tools") {
+                // Create a table with tool name, parameter name, parameter value, and expected response
+                table(
+                    headers("Tool Name", "Parameter Name", "Parameter Value", "Expected Response"),
+                    row("singleParamTool_int", "param1", JsonPrimitive(42), "MultiTypeToolKotlin_int answer 42"),
+                    row("singleParamTool_Integer", "param1", JsonPrimitive(123), "MultiTypeToolKotlin_Integer answer 123"),
+                    row("singleParamTool_bool", "param1", JsonPrimitive(true), "MultiTypeToolKotlin_Bool answer true"),
+                    row("singleParamTool_long", "param1", JsonPrimitive(9876543210L), "MultiTypeToolKotlin_Long answer 9876543210"),
+                    row("singleParamTool_float", "param1", JsonPrimitive(3.14f), "MultiTypeToolKotlin_Float answer 3.14"),
+                    row("singleParamTool_double", "param1", JsonPrimitive(2.71828), "MultiTypeToolKotlin_Double answer 2.71828"),
+                    row("singleParamTool_string", "param1", JsonPrimitive("hello"), "MultiTypeToolKotlin_String answer hello")
+                ).forAll { toolName, paramName, paramValue, expectedResponse ->
+                    runBlocking {
+                        try {
+                            val response = client.callTool(
+                                CallToolRequest(
+                                    name = toolName,
+                                    arguments = JsonObject(mapOf(
+                                        paramName to paramValue
+                                    ))
+                                )
+                            )
+                            response!!.content shouldBe listOf(TextContent(expectedResponse))
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            throw e
+                        }
                     }
                 }
             }

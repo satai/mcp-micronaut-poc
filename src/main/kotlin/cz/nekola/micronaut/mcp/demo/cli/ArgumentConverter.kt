@@ -27,6 +27,7 @@ class ArgumentConverter {
         return when (parameter.type) {
             Int::class.javaPrimitiveType,
             Int::class.java,
+            java.lang.Integer::class.java,
                 -> element.jsonPrimitive.intOrNull
             Long::class.javaPrimitiveType,
             Long::class.java,
