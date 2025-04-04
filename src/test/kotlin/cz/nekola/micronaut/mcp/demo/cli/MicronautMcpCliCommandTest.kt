@@ -108,7 +108,7 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                                     "arg22" to JsonPrimitive("arg2value")
                                 ))
                             )
-                        )!!.content shouldBe listOf(TextContent("""toolik 1234 "arg2value""""))
+                        )!!.content shouldBe listOf(TextContent("""toolik 1234 arg2value"""))
                         client.close()
                     } catch (e: Exception) {
                         e.printStackTrace()

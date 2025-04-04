@@ -41,7 +41,7 @@ class ArgumentConverter {
             Double::class.java
                     -> element.jsonPrimitive.doubleOrNull
             String::class.java
-                -> element.jsonPrimitive.toString()
+                -> element.jsonPrimitive.contentOrNull
             else
                 -> throw IllegalArgumentException("Unsupported type ${parameter.type}")
         }
