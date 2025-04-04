@@ -26,6 +26,8 @@ import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
 import io.kotest.data.table
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
 
 class MicronautMcpCliCommandTest : BehaviorSpec({
 
@@ -131,6 +133,11 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                     row("singleParamTool_float", "param1", JsonPrimitive(3.14f), "MultiTypeToolKotlin_Float answer 3.14"),
                     row("singleParamTool_double", "param1", JsonPrimitive(2.71828), "MultiTypeToolKotlin_Double answer 2.71828"),
                     row("singleParamTool_string", "param1", JsonPrimitive("hello"), "MultiTypeToolKotlin_String answer hello"),
+                    row("singleParamTool_array_of_strings", "param1", JsonArray(listOf(JsonPrimitive("eins"))), "MultiTypeToolKotlin_Array_of_Strings answer eins"),
+                    row("singleParamTool_array_of_strings", "param1", JsonArray(listOf(JsonPrimitive("eins"), JsonPrimitive("zwei"))), "MultiTypeToolKotlin_Array_of_Strings answer eins, zwei"),
+                    row("singleParamTool_array_of_ints", "param1", JsonArray(listOf(JsonPrimitive(1), JsonPrimitive(2))), "MultiTypeToolKotlin_Array_of_Ints answer 1, 2"),
+                    row("singleParamTool_array_of_ints", "param1", JsonArray(listOf()), "MultiTypeToolKotlin_Array_of_Ints answer "),
+                    row("singleParamTool_array_of_array_of_ints", "param1", JsonArray(listOf(JsonArray(listOf(JsonPrimitive(11), JsonPrimitive(12))), JsonArray(listOf(JsonPrimitive(2))))), "MultiTypeToolKotlin_Array_of_Array_of_Ints answer [[11, 12], [2]]"),
                     row("singleParamTool_int_java", "param1", JsonPrimitive(42), "MultiTypeToolJava_int answer 42"),
                     row("singleParamTool_Integer_java", "param1", JsonPrimitive(123), "MultiTypeToolJava_Integer answer 123"),
                     row("singleParamTool_bool_java", "param1", JsonPrimitive(true), "MultiTypeToolJava_Bool answer true"),
@@ -138,6 +145,7 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                     row("singleParamTool_float_java", "param1", JsonPrimitive(3.14f), "MultiTypeToolJava_Float answer 3.14"),
                     row("singleParamTool_double_java", "param1", JsonPrimitive(2.71828), "MultiTypeToolJava_Double answer 2.71828"),
                     row("singleParamTool_string_java", "param1", JsonPrimitive("hello"), "MultiTypeToolJava_String answer hello"),
+                    row("singleParamTool_array_of_arrays_of_strings_java", "param1", JsonArray(listOf(JsonArray(listOf(JsonPrimitive(11), JsonPrimitive(12))), JsonArray(listOf(JsonPrimitive(2))))), "MultiTypeToolJava_ArrayOfArrayyOfStrings answer [[11, 12], [2]]"),
                     row("singleParamTool_int_groovy", "param1", JsonPrimitive(42), "MultiTypeToolGroovy_int answer 42"),
                     row("singleParamTool_Integer_groovy", "param1", JsonPrimitive(123), "MultiTypeToolGroovy_Integer answer 123"),
                     row("singleParamTool_bool_groovy", "param1", JsonPrimitive(true), "MultiTypeToolGroovy_Bool answer true"),

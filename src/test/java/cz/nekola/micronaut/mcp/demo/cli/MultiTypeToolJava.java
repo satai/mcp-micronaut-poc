@@ -2,6 +2,8 @@ package cz.nekola.micronaut.mcp.demo.cli;
 
 import jakarta.inject.Singleton;
 
+import java.util.Arrays;
+
 @Singleton
 public class MultiTypeToolJava {
     @Tool(
@@ -72,5 +74,15 @@ public class MultiTypeToolJava {
         @ToolArg(description = "String arg description") String param1
     ) {
         return "MultiTypeToolJava_String answer " + param1;
+    }
+
+    @Tool(
+            name = "singleParamTool_array_of_arrays_of_strings_java",
+            description = "Test tool with single array of array of strings param (Java)"
+    )
+    public String singleParamTool_array_of_arrays_of_strings(
+            @ToolArg(description = "Array of array of Strings arg description") String[][] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfArrayyOfStrings answer " + Arrays.deepToString(param1);
     }
 }

@@ -18,7 +18,7 @@ class TypeConverterSpec : BehaviorSpec({
 
         `when`("converting JDK types to MCP types") {
             then("should correctly convert String type") {
-                typeConverter.jdkType2McpType(String::class.java) shouldBe JsonPrimitive("String")
+                typeConverter.jdkType2McpType(String::class.java)shouldBe mapOf("type" to JsonPrimitive("String"))
             }
 
             then("should correctly convert integer types") {
@@ -29,7 +29,7 @@ class TypeConverterSpec : BehaviorSpec({
                     row(Long::class.javaPrimitiveType, JsonPrimitive("integer")),
                     row(Long::class.java, JsonPrimitive("integer")),
                 ).forAll { jdkType, expectedMcpType ->
-                    typeConverter.jdkType2McpType(jdkType!!) shouldBe expectedMcpType
+                    typeConverter.jdkType2McpType(jdkType!!) shouldBe mapOf("type" to expectedMcpType)
                 }
             }
 
@@ -41,7 +41,7 @@ class TypeConverterSpec : BehaviorSpec({
                     row(Float::class.javaPrimitiveType, JsonPrimitive("number")),
                     row(Float::class.java, JsonPrimitive("number")),
                 ).forAll { jdkType, expectedMcpType ->
-                    typeConverter.jdkType2McpType(jdkType!!) shouldBe expectedMcpType
+                    typeConverter.jdkType2McpType(jdkType!!) shouldBe mapOf("type" to expectedMcpType)
                 }
             }
 
@@ -51,7 +51,7 @@ class TypeConverterSpec : BehaviorSpec({
                     row(Boolean::class.javaPrimitiveType, JsonPrimitive("boolean")),
                     row(Boolean::class.java, JsonPrimitive("boolean")),
                 ).forAll { jdkType, expectedMcpType ->
-                    typeConverter.jdkType2McpType(jdkType!!) shouldBe expectedMcpType
+                    typeConverter.jdkType2McpType(jdkType!!) shouldBe mapOf("type" to expectedMcpType)
                 }
             }
 

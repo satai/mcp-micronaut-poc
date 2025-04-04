@@ -67,7 +67,7 @@ class MyTool {
 - Not a library now, just example App
 - CLI (StdInOut) communication only
 - Tools only (no Prompts...)
-- Only int, boolean, number and strings as parameters
+- Only int, boolean, number and strings and arrays (one or multidimensional) as parameters
 - Only one String on output, no pictures, music
 - no configuration of the server
 - Temporary (?) package

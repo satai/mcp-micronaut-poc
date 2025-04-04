@@ -59,4 +59,29 @@ class MultiTypeToolKotlin {
     fun singleParamTool_string(
         @ToolArg("String arg description") param1: String
     ) = "MultiTypeToolKotlin_String answer $param1"
+
+    @Tool(
+        name = "singleParamTool_array_of_strings",
+        description = "Test tool with single array of strings param"
+    )
+    fun singleParamTool_array_of_strings(
+        @ToolArg("Array of Strings arg description") param1: Array<String>
+    ) = "MultiTypeToolKotlin_Array_of_Strings answer ${param1.joinToString()}"
+
+    @Tool(
+        name = "singleParamTool_array_of_ints",
+        description = "Test tool with single array of ints param"
+    )
+    fun singleParamTool_array_of_ints(
+        @ToolArg("Array of Ints arg description") param1: Array<Int>
+    ) = "MultiTypeToolKotlin_Array_of_Ints answer ${param1.joinToString()}"
+
+    @Tool(
+        name = "singleParamTool_array_of_array_of_ints",
+        description = "Test tool with single array of array of ints param"
+    )
+    fun singleParamTool_array_of_arrays_of_ints(
+        @ToolArg("Array of Ints arg description") param1: Array<Array<Int>>
+    ) = """MultiTypeToolKotlin_Array_of_Array_of_Ints answer ${param1.map {  "[${it.joinToString()}]" }}"""
+
 }

@@ -25,9 +25,8 @@ class ToolBuilder(
                     val description = it.getAnnotation(ToolArg::class.java).stringValue("description").get()
                     it.name to JsonObject(
                         mapOf(
-                            "type" to typeConverter.jdkType2McpType(it.type),
                             "description" to JsonPrimitive(description)
-                        )
+                        ) + typeConverter.jdkType2McpType(it.type)
                     )
                 }
             )

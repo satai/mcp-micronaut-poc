@@ -24,27 +24,46 @@ class ArgumentConverter {
         parameter: @NonNull Argument<*>,
     ): Any? {
         val element: JsonElement = call.arguments[parameter.name]!!
-        return when (parameter.type) {
-            Int::class.javaPrimitiveType,
-            Int::class.java,
-            java.lang.Integer::class.java,
-                -> element.jsonPrimitive.intOrNull
-            Long::class.javaPrimitiveType,
-            Long::class.java,
-                -> element.jsonPrimitive.longOrNull
-            Boolean::class.javaPrimitiveType,
-            Boolean::class.java
-                -> element.jsonPrimitive.booleanOrNull
-            Float::class.javaPrimitiveType,
-            Float::class.java
-                    -> element.jsonPrimitive.floatOrNull
-            Double::class.javaPrimitiveType,
-            Double::class.java
-                    -> element.jsonPrimitive.doubleOrNull
-            String::class.java
-                -> element.jsonPrimitive.contentOrNull
-            else
-                -> throw IllegalArgumentException("Unsupported type ${parameter.type}")
-        }
+        return convertType(parameter.type, element)
+    }
+
+    private fun convertType(
+        type: @NonNull Class<*>,
+        element: JsonElement,
+    ): Any? = when (type) {
+        Int::class.javaPrimitiveType,
+        Int::class.java,
+        Integer::class.java,
+            -> element.jsonPrimitive.intOrNull
+
+        Long::class.javaPrimitiveType,
+        Long::class.java,
+            -> element.jsonPrimitive.longOrNull
+
+        Boolean::class.javaPrimitiveType,
+        Boolean::class.java,
+            -> element.jsonPrimitive.booleanOrNull
+
+        Float::class.javaPrimitiveType,
+        Float::class.java,
+            -> element.jsonPrimitive.floatOrNull
+
+        Double::class.javaPrimitiveType,
+        Double::class.java,
+            -> element.jsonPrimitive.doubleOrNull
+
+        String::class.java,
+            -> element.jsonPrimitive.contentOrNull
+
+        else ->
+            when {
+                type.isArray -> {
+                    val elements: List<Any?> = element.jsonArray.map { convertType(type.componentType, it) }
+                    val targetArray = java.lang.reflect.Array.newInstance(type.componentType, elements.size) as Array<Any?>
+                    targetArray.indices.forEach { i -> targetArray[i] = elements[i] }
+                    targetArray
+                }
+                else -> throw IllegalArgumentException("Unsupported type $type")
+            }
     }
 }
