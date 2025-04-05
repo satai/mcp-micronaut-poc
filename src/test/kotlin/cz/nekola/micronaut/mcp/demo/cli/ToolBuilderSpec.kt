@@ -1,7 +1,7 @@
 package cz.nekola.micronaut.mcp.demo.cli
 
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.micronaut.context.ApplicationContext
 import io.micronaut.inject.BeanDefinition
 import io.micronaut.inject.ExecutableMethod
@@ -14,44 +14,35 @@ import kotlinx.serialization.json.*
 @MicronautTest
 class ToolBuilderSpec : BehaviorSpec({
     given("ToolBuilder") {
+        // Create mock for serverWrapper only, use real implementations for other beans
+        val serverWrapper = mockk<ServerWrapper>(relaxed = true)
+        val applicationContext = ApplicationContext.run()
+        val typeConverter = TypeConverter()
+        val argumentConverter = ArgumentConverter()
+
+        // Create a ToolBuilder with mock for serverWrapper and real implementations for other beans
         val toolBuilder = ToolBuilder(
-            serverWrapper = ServerWrapper(),
-            applicationContext = ApplicationContext.run(),
-            typeConverter = TypeConverter(),
-            argumentConverter = ArgumentConverter()
+            serverWrapper = serverWrapper,
+            applicationContext = applicationContext,
+            typeConverter = typeConverter,
+            argumentConverter = argumentConverter
         )
 
         `when`("initialized") {
             then("should be properly initialized") {
                 // Verify that the ToolBuilder is properly initialized with its dependencies
-                (toolBuilder is ToolBuilder) shouldBe true
+                toolBuilder.shouldNotBeNull()
             }
         }
 
         `when`("processing a method with Tool annotation") {
-            // Create mock for serverWrapper only, use real implementations for other beans
-            val serverWrapper = mockk<ServerWrapper>(relaxed = true)
-            val applicationContext = ApplicationContext.run()
-            val typeConverter = TypeConverter()
-            val argumentConverter = ArgumentConverter()
-
-            // Create a ToolBuilder with mock for serverWrapper and real implementations for other beans
-            val toolBuilder = ToolBuilder(
-                serverWrapper = serverWrapper,
-                applicationContext = applicationContext,
-                typeConverter = typeConverter,
-                argumentConverter = argumentConverter
-            )
-
-            // Create mock for BeanDefinition
-            val beanDefinition = mockk<BeanDefinition<*>>()
+            val beanDefinition = applicationContext.getBeanDefinition(FooTool::class.java)
 
             // Use a real method from FooTool for targetMethod
             val fooTool = FooTool()
             val targetMethod = fooTool.javaClass.getDeclaredMethod("toolik")
 
-
-             //FIXME too much mocking
+            // FIXME too much mocking
             // Create mocks for other objects
             val executableMethod = mockk<ExecutableMethod<Any, Any>>()
             val annotationMetadata = mockk<io.micronaut.core.annotation.AnnotationMetadata>()
@@ -84,7 +75,7 @@ class ToolBuilderSpec : BehaviorSpec({
                         tool = match<SdkTool> { 
                             it.name == "testTool" && 
                             it.description == "Test tool description" &&
-                            it.inputSchema?.properties?.get("testArg")?.jsonObject?.get("description")?.jsonPrimitive?.content == "Test arg description"
+                            it.inputSchema.properties["testArg"]?.jsonObject?.get("description")?.jsonPrimitive?.content == "Test arg description"
                         },
                         handler = any()
                     )
