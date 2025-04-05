@@ -19,7 +19,7 @@ class ArgumentConverter {
      * @return The converted value, or null if the conversion is not possible
      * @throws IllegalArgumentException if the parameter type is not supported
      */
-    fun convert(
+    fun mcpValue2jvmValue(
         call: CallToolRequest,
         parameter: @NonNull Argument<*>,
     ): Any? {
@@ -62,20 +62,52 @@ class ArgumentConverter {
 
         else ->
             when {
-                type.isArray -> {
-                    val componentType = type.componentType
-                    if (componentType.isPrimitive) {
-                        TODO()
-                    } else if (componentType.isRecord) {
-                        TODO()
-                    } else {
-                        val elements: List<Any?> = element.jsonArray.map { convertType(componentType, it) }
-                        val targetArray = java.lang.reflect.Array.newInstance(componentType, elements.size) as Array<Any?>
-                        targetArray.indices.forEach { i -> targetArray[i] = elements[i] }
-                        targetArray
-                    }
-                }
+                type.isArray -> convertArray(type, element)
                 else -> throw IllegalArgumentException("Unsupported type $type")
             }
+    }
+
+    private fun convertArray(
+        type: @NonNull Class<*>,
+        element: JsonElement,
+    ): Any? {
+        val componentType = type.componentType
+        return if (componentType.isPrimitive) {
+            when (componentType) {
+                Int::class.javaPrimitiveType -> {
+                    val targetArray = IntArray(element.jsonArray.size)
+                    targetArray.indices.forEach { i -> targetArray[i] = element.jsonArray[i].jsonPrimitive.int}
+                    targetArray
+                }
+                Long::class.javaPrimitiveType -> {
+                    val targetArray = LongArray(element.jsonArray.size)
+                    targetArray.indices.forEach { i -> targetArray[i] = element.jsonArray[i].jsonPrimitive.long}
+                    targetArray
+                }
+                Double::class.javaPrimitiveType -> {
+                    val targetArray = DoubleArray(element.jsonArray.size)
+                    targetArray.indices.forEach { i -> targetArray[i] = element.jsonArray[i].jsonPrimitive.double}
+                    targetArray
+                }
+                Float::class.javaPrimitiveType -> {
+                    val targetArray = FloatArray(element.jsonArray.size)
+                    targetArray.indices.forEach { i -> targetArray[i] = element.jsonArray[i].jsonPrimitive.float}
+                    targetArray
+                }
+                Boolean::class.javaPrimitiveType -> {
+                    val targetArray = BooleanArray(element.jsonArray.size)
+                    targetArray.indices.forEach { i -> targetArray[i] = element.jsonArray[i].jsonPrimitive.boolean}
+                    targetArray
+                }
+                else -> throw IllegalArgumentException("Unsupported componentType: $componentType")
+            }
+        } else if (componentType.isRecord) {
+            TODO()
+        } else {
+            val elements: List<Any?> = element.jsonArray.map { convertType(componentType, it) }
+            val targetArray = java.lang.reflect.Array.newInstance(componentType, elements.size) as Array<Any?>
+            targetArray.indices.forEach { i -> targetArray[i] = elements[i] }
+            targetArray
+        }
     }
 }

@@ -111,9 +111,49 @@ public class MultiTypeToolJava {
         description = "Test tool with single array of ints param (Java)"
     )
     public String singleParamTool_array_of_ints(
-        @ToolArg(description = "Array of Ints arg description") int[] param1
+        @ToolArg(description = "Array of ints arg description") int[] param1
     ) {
         return "MultiTypeToolJava_ArrayOfInts answer " + Arrays.toString(param1);
+    }
+
+    @Tool(
+        name = "singleParamTool_array_of_longs_java",
+        description = "Test tool with single array of longs param (Java)"
+    )
+    public String singleParamTool_array_of_longs(
+        @ToolArg(description = "Array of longs arg description") long[] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfLongs answer " + Arrays.toString(param1);
+    }
+
+    @Tool(
+        name = "singleParamTool_array_of_doubles_java",
+        description = "Test tool with single array of longs param (Java)"
+    )
+    public String singleParamTool_array_of_doubles(
+        @ToolArg(description = "Array of doubles arg description") double[] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfDoubles answer " + Arrays.toString(param1);
+    }
+
+    @Tool(
+        name = "singleParamTool_array_of_floats_java",
+        description = "Test tool with single array of floats param (Java)"
+    )
+    public String singleParamTool_array_of_floats(
+        @ToolArg(description = "Array of floats arg description") float[] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfFloats answer " + Arrays.toString(param1);
+    }
+
+    @Tool(
+        name = "singleParamTool_array_of_booleans_java",
+        description = "Test tool with single array of booleans param (Java)"
+    )
+    public String singleParamTool_array_of_booleans(
+        @ToolArg(description = "Array of booleans arg description") boolean[] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfBooleans answer " + Arrays.toString(param1);
     }
 
     @Tool(

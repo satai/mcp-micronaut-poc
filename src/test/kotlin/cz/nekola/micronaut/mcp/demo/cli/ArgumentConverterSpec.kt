@@ -88,9 +88,9 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val primitiveArgument = createArgument(paramName, primitiveType)
                     val objectArgument = createArgument(paramName, objectType)
 
-                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe intValue
-                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe intValue
-                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe intValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, boxedArgument) shouldBe intValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, primitiveArgument) shouldBe intValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, objectArgument) shouldBe intValue
                 }
             }
 
@@ -110,9 +110,9 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val primitiveArgument = createArgument(paramName, primitiveType)
                     val objectArgument = createArgument(paramName, objectType)
 
-                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe longValue
-                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe longValue
-                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe longValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, boxedArgument) shouldBe longValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, primitiveArgument) shouldBe longValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, objectArgument) shouldBe longValue
                 }
             }
 
@@ -132,9 +132,9 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val primitiveArgument = createArgument(paramName, primitiveType)
                     val objectArgument = createArgument(paramName, objectType)
 
-                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe booleanValue
-                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe booleanValue
-                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe booleanValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, boxedArgument) shouldBe booleanValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, primitiveArgument) shouldBe booleanValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, objectArgument) shouldBe booleanValue
                 }
             }
 
@@ -154,9 +154,9 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val primitiveArgument = createArgument(paramName, primitiveType)
                     val objectArgument = createArgument(paramName, objectType)
 
-                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe floatValue
-                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe floatValue
-                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe floatValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, boxedArgument) shouldBe floatValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, primitiveArgument) shouldBe floatValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, objectArgument) shouldBe floatValue
                 }
             }
 
@@ -176,9 +176,9 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val primitiveArgument = createArgument(paramName, primitiveType)
                     val objectArgument = createArgument(paramName, objectType)
 
-                    argumentConverter.convert(callToolRequest, boxedArgument) shouldBe doubleValue
-                    argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe doubleValue
-                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe doubleValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, boxedArgument) shouldBe doubleValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, primitiveArgument) shouldBe doubleValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, objectArgument) shouldBe doubleValue
                 }
             }
 
@@ -190,7 +190,7 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val callToolRequest = createCallToolRequest(paramName, stringValue)
                     val stringArgument = createArgument(paramName, String::class.java)
 
-                    argumentConverter.convert(callToolRequest, stringArgument) shouldBe stringValue
+                    argumentConverter.mcpValue2jvmValue(callToolRequest, stringArgument) shouldBe stringValue
                 }
             }
 
@@ -205,7 +205,7 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val arrayType = Array<Int>::class.java
                     val argument = createArgument(paramName, arrayType)
 
-                    val result = argumentConverter.convert(callToolRequest, argument) as Array<*>
+                    val result = argumentConverter.mcpValue2jvmValue(callToolRequest, argument) as Array<*>
 
                     // Verify the result
                     result.size shouldBe intArray.size
@@ -226,7 +226,7 @@ class ArgumentConverterSpec : BehaviorSpec({
                     val arrayType = Array<String>::class.java
                     val argument = createArgument(paramName, arrayType)
 
-                    val result = argumentConverter.convert(callToolRequest, argument) as Array<*>
+                    val result = argumentConverter.mcpValue2jvmValue(callToolRequest, argument) as Array<*>
 
                     // Verify the result
                     result.size shouldBe stringArray.size
@@ -245,14 +245,14 @@ class ArgumentConverterSpec : BehaviorSpec({
                 val intCallToolRequest = createCallToolRequest(paramName, emptyIntArray)
                 val intArrayType = Array<Int>::class.java
                 val intArgument = createArgument(paramName, intArrayType)
-                val intResult = argumentConverter.convert(intCallToolRequest, intArgument) as Array<*>
+                val intResult = argumentConverter.mcpValue2jvmValue(intCallToolRequest, intArgument) as Array<*>
                 intResult.size shouldBe 0
 
                 // Test empty string array
                 val stringCallToolRequest = createCallToolRequest(paramName, emptyStringArray)
                 val stringArrayType = Array<String>::class.java
                 val stringArgument = createArgument(paramName, stringArrayType)
-                val stringResult = argumentConverter.convert(stringCallToolRequest, stringArgument) as Array<*>
+                val stringResult = argumentConverter.mcpValue2jvmValue(stringCallToolRequest, stringArgument) as Array<*>
                 stringResult.size shouldBe 0
             }
 
@@ -268,7 +268,7 @@ class ArgumentConverterSpec : BehaviorSpec({
                 val arrayType = Array<Array<Int>>::class.java
                 val argument = createArgument(paramName, arrayType)
 
-                val result = argumentConverter.convert(callToolRequest, argument) as Array<*>
+                val result = argumentConverter.mcpValue2jvmValue(callToolRequest, argument) as Array<*>
 
                 // Verify the result
                 result.size shouldBe intMatrix.size
@@ -301,7 +301,7 @@ class ArgumentConverterSpec : BehaviorSpec({
                 unsupportedTypes.forEach { type ->
                     val unsupportedArgument = createArgument(paramName, type!!)
                     shouldThrow<IllegalArgumentException> {
-                        argumentConverter.convert(callToolRequest, unsupportedArgument)
+                        argumentConverter.mcpValue2jvmValue(callToolRequest, unsupportedArgument)
                     }
                 }
             }

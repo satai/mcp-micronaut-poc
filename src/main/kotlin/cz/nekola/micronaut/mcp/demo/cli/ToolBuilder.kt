@@ -47,7 +47,7 @@ class ToolBuilder(
         beanDefinition: BeanDefinition<*>?,
     ): suspend (CallToolRequest) -> CallToolResult =
         { call ->
-            val args: Array<Any?> = method.arguments.map { parameter -> argumentConverter.convert(call, parameter) }.toTypedArray()
+            val args: Array<Any?> = method.arguments.map { parameter -> argumentConverter.mcpValue2jvmValue(call, parameter) }.toTypedArray()
             val bean = applicationContext.getBean(beanDefinition)
             val beanResult = method.targetMethod.invoke(bean, *args)
             CallToolResult(listOf(TextContent(beanResult.toString())))
