@@ -85,4 +85,44 @@ public class MultiTypeToolJava {
     ) {
         return "MultiTypeToolJava_ArrayOfArrayyOfStrings answer " + Arrays.deepToString(param1);
     }
+
+    @Tool(
+        name = "singleParamTool_Boolean_java",
+        description = "Test tool with single Boolean param (Java)"
+    )
+    public String singleParamTool_Boolean(
+        @ToolArg(description = "Boolean arg description") Boolean param1
+    ) {
+        return "MultiTypeToolJava_Boolean answer " + param1;
+    }
+
+    @Tool(
+        name = "singleParamTool_array_of_strings_java",
+        description = "Test tool with single array of strings param (Java)"
+    )
+    public String singleParamTool_array_of_strings(
+        @ToolArg(description = "Array of Strings arg description") String[] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfStrings answer " + Arrays.toString(param1);
+    }
+
+    @Tool(
+        name = "singleParamTool_array_of_ints_java",
+        description = "Test tool with single array of ints param (Java)"
+    )
+    public String singleParamTool_array_of_ints(
+        @ToolArg(description = "Array of Ints arg description") int[] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfInts answer " + Arrays.toString(param1);
+    }
+
+    @Tool(
+        name = "singleParamTool_array_of_arrays_of_ints_java",
+        description = "Test tool with single array of array of ints param (Java)"
+    )
+    public String singleParamTool_array_of_arrays_of_ints(
+        @ToolArg(description = "Array of array of Ints arg description") int[][] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfArrayOfInts answer " + Arrays.deepToString(param1);
+    }
 }

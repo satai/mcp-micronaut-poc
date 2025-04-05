@@ -63,10 +63,15 @@ class ArgumentConverter {
         else ->
             when {
                 type.isArray -> {
-                    val elements: List<Any?> = element.jsonArray.map { convertType(type.componentType, it) }
-                    val targetArray = java.lang.reflect.Array.newInstance(type.componentType, elements.size) as Array<Any?>
-                    targetArray.indices.forEach { i -> targetArray[i] = elements[i] }
-                    targetArray
+                    val componentType = type.componentType
+                    if (componentType.isPrimitive) {
+                        TODO()
+                    } else {
+                        val elements: List<Any?> = element.jsonArray.map { convertType(componentType, it) }
+                        val targetArray = java.lang.reflect.Array.newInstance(componentType, elements.size) as Array<Any?>
+                        targetArray.indices.forEach { i -> targetArray[i] = elements[i] }
+                        targetArray
+                    }
                 }
                 else -> throw IllegalArgumentException("Unsupported type $type")
             }
