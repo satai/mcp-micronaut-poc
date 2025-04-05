@@ -34,22 +34,27 @@ class ArgumentConverter {
         Int::class.javaPrimitiveType,
         Int::class.java,
         Integer::class.java,
+        Int::class.javaObjectType,
             -> element.jsonPrimitive.intOrNull
 
         Long::class.javaPrimitiveType,
         Long::class.java,
+        Long::class.javaObjectType,
             -> element.jsonPrimitive.longOrNull
 
         Boolean::class.javaPrimitiveType,
         Boolean::class.java,
+        Boolean::class.javaObjectType,
             -> element.jsonPrimitive.booleanOrNull
 
         Float::class.javaPrimitiveType,
         Float::class.java,
+        Float::class.javaObjectType,
             -> element.jsonPrimitive.floatOrNull
 
         Double::class.javaPrimitiveType,
         Double::class.java,
+        Double::class.javaObjectType,
             -> element.jsonPrimitive.doubleOrNull
 
         String::class.java,

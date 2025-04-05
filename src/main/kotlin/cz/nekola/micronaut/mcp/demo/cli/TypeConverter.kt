@@ -14,15 +14,20 @@ class TypeConverter {
                 -> mapOf("type" to JsonPrimitive("String"))
             Int::class.javaPrimitiveType,
             Integer::class.java,
+            Int::class.javaObjectType,
             Long::class.java,
-            Long::class.javaPrimitiveType
+            Long::class.javaPrimitiveType,
+            Long::class.javaObjectType,
                 -> mapOf("type" to JsonPrimitive("integer"))
             Double::class.javaPrimitiveType,
             Double::class.java,
+            Double::class.javaObjectType,
             Float::class.javaPrimitiveType,
-            Float::class.java
+            Float::class.java,
+            Float::class.javaObjectType,
                 -> mapOf("type" to JsonPrimitive("number"))
             Boolean::class.javaPrimitiveType,
+            Boolean::class.javaObjectType,
             Boolean::class.java
                 -> mapOf("type" to JsonPrimitive("boolean"))
 

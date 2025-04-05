@@ -79,15 +79,18 @@ class ArgumentConverterSpec : BehaviorSpec({
                 intValues.forEach { intValue ->
                     val callToolRequest = createCallToolRequest(paramName, intValue)
 
-                    // Test both boxed and primitive types
+                    // Test boxed, primitive, and object types
                     val boxedType = Int::class.java
                     val primitiveType = Int::class.javaPrimitiveType!!
+                    val objectType = Int::class.javaObjectType
 
                     val boxedArgument = createArgument(paramName, boxedType)
                     val primitiveArgument = createArgument(paramName, primitiveType)
+                    val objectArgument = createArgument(paramName, objectType)
 
                     argumentConverter.convert(callToolRequest, boxedArgument) shouldBe intValue
                     argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe intValue
+                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe intValue
                 }
             }
 
@@ -98,15 +101,18 @@ class ArgumentConverterSpec : BehaviorSpec({
                 longValues.forEach { longValue ->
                     val callToolRequest = createCallToolRequest(paramName, longValue)
 
-                    // Test both boxed and primitive types
+                    // Test boxed, primitive, and object types
                     val boxedType = Long::class.java
                     val primitiveType = Long::class.javaPrimitiveType!!
+                    val objectType = Long::class.javaObjectType
 
                     val boxedArgument = createArgument(paramName, boxedType)
                     val primitiveArgument = createArgument(paramName, primitiveType)
+                    val objectArgument = createArgument(paramName, objectType)
 
                     argumentConverter.convert(callToolRequest, boxedArgument) shouldBe longValue
                     argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe longValue
+                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe longValue
                 }
             }
 
@@ -117,15 +123,18 @@ class ArgumentConverterSpec : BehaviorSpec({
                 booleanValues.forEach { booleanValue ->
                     val callToolRequest = createCallToolRequest(paramName, booleanValue)
 
-                    // Test both boxed and primitive types
+                    // Test boxed, primitive, and object types
                     val boxedType = Boolean::class.java
                     val primitiveType = Boolean::class.javaPrimitiveType!!
+                    val objectType = Boolean::class.javaObjectType
 
                     val boxedArgument = createArgument(paramName, boxedType)
                     val primitiveArgument = createArgument(paramName, primitiveType)
+                    val objectArgument = createArgument(paramName, objectType)
 
                     argumentConverter.convert(callToolRequest, boxedArgument) shouldBe booleanValue
                     argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe booleanValue
+                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe booleanValue
                 }
             }
 
@@ -136,15 +145,18 @@ class ArgumentConverterSpec : BehaviorSpec({
                 floatValues.forEach { floatValue ->
                     val callToolRequest = createCallToolRequest(paramName, floatValue)
 
-                    // Test both boxed and primitive types
+                    // Test boxed, primitive, and object types
                     val boxedType = Float::class.java
                     val primitiveType = Float::class.javaPrimitiveType!!
+                    val objectType = Float::class.javaObjectType
 
                     val boxedArgument = createArgument(paramName, boxedType)
                     val primitiveArgument = createArgument(paramName, primitiveType)
+                    val objectArgument = createArgument(paramName, objectType)
 
                     argumentConverter.convert(callToolRequest, boxedArgument) shouldBe floatValue
                     argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe floatValue
+                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe floatValue
                 }
             }
 
@@ -155,15 +167,18 @@ class ArgumentConverterSpec : BehaviorSpec({
                 doubleValues.forEach { doubleValue ->
                     val callToolRequest = createCallToolRequest(paramName, doubleValue)
 
-                    // Test both boxed and primitive types
+                    // Test boxed, primitive, and object types
                     val boxedType = Double::class.java
                     val primitiveType = Double::class.javaPrimitiveType!!
+                    val objectType = Double::class.javaObjectType
 
                     val boxedArgument = createArgument(paramName, boxedType)
                     val primitiveArgument = createArgument(paramName, primitiveType)
+                    val objectArgument = createArgument(paramName, objectType)
 
                     argumentConverter.convert(callToolRequest, boxedArgument) shouldBe doubleValue
                     argumentConverter.convert(callToolRequest, primitiveArgument) shouldBe doubleValue
+                    argumentConverter.convert(callToolRequest, objectArgument) shouldBe doubleValue
                 }
             }
 
