@@ -66,6 +66,8 @@ class ArgumentConverter {
                     val componentType = type.componentType
                     if (componentType.isPrimitive) {
                         TODO()
+                    } else if (componentType.isRecord) {
+                        TODO()
                     } else {
                         val elements: List<Any?> = element.jsonArray.map { convertType(componentType, it) }
                         val targetArray = java.lang.reflect.Array.newInstance(componentType, elements.size) as Array<Any?>
