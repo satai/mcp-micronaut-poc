@@ -154,6 +154,7 @@ class MicronautMcpCliCommandTest : BehaviorSpec({
                     row("singleParamTool_array_of_booleans_java", "param1", JsonArray(listOf(JsonPrimitive(false), JsonPrimitive(true))), "MultiTypeToolJava_ArrayOfBooleans answer [false, true]"),
                     row("singleParamTool_array_of_arrays_of_ints_java", "param1", JsonArray(listOf(JsonArray(listOf(JsonPrimitive(11), JsonPrimitive(12))), JsonArray(listOf(JsonPrimitive(2))))), "MultiTypeToolJava_ArrayOfArrayOfInts answer [[11, 12], [2]]"),
                     row("singleParamTool_array_of_arrays_of_strings_java", "param1", JsonArray(listOf(JsonArray(listOf(JsonPrimitive("11"), JsonPrimitive("12"))), JsonArray(listOf(JsonPrimitive("two"))))), "MultiTypeToolJava_ArrayOfArrayyOfStrings answer [[11, 12], [two]]"),
+                    row("singleParamTool_array_of_arrays_of_booleans_java", "param1", JsonArray(listOf(JsonArray(listOf(JsonPrimitive(true), JsonPrimitive(false))), JsonArray(listOf(JsonPrimitive(false),JsonPrimitive(true),JsonPrimitive(true))))), "MultiTypeToolJava_ArrayOfArrayOfBooleans answer [[true, false], [false, true, true]]"),
                     row("singleParamTool_int_groovy", "param1", JsonPrimitive(42), "MultiTypeToolGroovy_int answer 42"),
                     row("singleParamTool_Integer_groovy", "param1", JsonPrimitive(123), "MultiTypeToolGroovy_Integer answer 123"),
                     row("singleParamTool_bool_groovy", "param1", JsonPrimitive(true), "MultiTypeToolGroovy_Bool answer true"),

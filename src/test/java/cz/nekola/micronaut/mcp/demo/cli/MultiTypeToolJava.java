@@ -165,4 +165,14 @@ public class MultiTypeToolJava {
     ) {
         return "MultiTypeToolJava_ArrayOfArrayOfInts answer " + Arrays.deepToString(param1);
     }
+
+    @Tool(
+        name = "singleParamTool_array_of_arrays_of_booleans_java",
+        description = "Test tool with single array of array of booleans param (Java)"
+    )
+    public String singleParamTool_array_of_arrays_of_booleans(
+        @ToolArg(description = "Array of array of booleans arg description") boolean[][] param1
+    ) {
+        return "MultiTypeToolJava_ArrayOfArrayOfBooleans answer " + Arrays.deepToString(param1);
+    }
 }
