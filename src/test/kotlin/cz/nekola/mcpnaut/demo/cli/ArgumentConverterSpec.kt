@@ -1,4 +1,4 @@
-package cz.nekola.micronaut.mcp.demo.cli
+package cz.nekola.mcpnaut.demo.cli
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec

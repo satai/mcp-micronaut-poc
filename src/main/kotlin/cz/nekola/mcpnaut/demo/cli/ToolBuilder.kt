@@ -1,4 +1,4 @@
-package cz.nekola.micronaut.mcp.demo.cli
+package cz.nekola.mcpnaut.demo.cli
 
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.processor.ExecutableMethodProcessor

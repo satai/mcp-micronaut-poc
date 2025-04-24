@@ -1,4 +1,4 @@
-# Micronaut MCP Cli
+# MCPNaut Cli Example
 
 PoC of [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) integration into [Micronaut](https://micronaut.io/) framework.
 

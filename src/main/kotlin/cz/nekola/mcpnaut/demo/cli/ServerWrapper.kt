@@ -1,4 +1,4 @@
-package cz.nekola.micronaut.mcp.demo.cli
+package cz.nekola.mcpnaut.demo.cli
 
 import io.modelcontextprotocol.kotlin.sdk.*
 import io.modelcontextprotocol.kotlin.sdk.server.Server

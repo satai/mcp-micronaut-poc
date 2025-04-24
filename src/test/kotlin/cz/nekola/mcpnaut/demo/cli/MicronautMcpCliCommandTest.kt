@@ -1,4 +1,4 @@
-package cz.nekola.micronaut.mcp.demo.cli
+package cz.nekola.mcpnaut.demo.cli
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldContain
@@ -27,7 +27,6 @@ import io.kotest.data.headers
 import io.kotest.data.row
 import io.kotest.data.table
 import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
 
 class MicronautMcpCliCommandTest : BehaviorSpec({
 
