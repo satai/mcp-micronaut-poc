@@ -1,0 +1,41 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'io.micronaut.application' version '4.4.4'
+    id 'groovy'
+}
+
+version = '0.1'
+group = 'cz.nekola.micronaut.mcp.demo.cli'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor 'io.micronaut.serde:micronaut-serde-processor'
+    implementation 'info.picocli:picocli'
+    implementation 'io.micronaut.picocli:micronaut-picocli'
+    implementation 'io.micronaut.serde:micronaut-serde-jackson'
+    implementation platform('io.modelcontextprotocol.sdk:mcp-bom:0.9.0')
+    implementation 'io.modelcontextprotocol.sdk:mcp'
+    implementation 'org.apache.groovy:groovy:4.0.18'
+    runtimeOnly 'ch.qos.logback:logback-classic'
+
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+}
+
+application {
+    mainClass = 'cz.nekola.micronaut.mcp.demo.cli.MicronautMcpCliCommand'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+micronaut {
+    testRuntime 'junit5'
+    processing {
+        incremental true
+        annotations 'cz.nekola.micronaut.mcp.demo.cli.*'
+    }
+}
